@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Cards – Vanilla JS (Modified)</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #171923;
+      --muted: #94a3b8;
+      --text: #e2e8f0;
+      --accent: #60a5fa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+      color: var(--text);
+    }
+    header {
+      padding: 24px 16px;
+      border-bottom: 1px solid #222;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 28px; margin-bottom: 6px; }
+    .sub { color: var(--muted); }
+
+    /* Controls */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px;
+      align-items: center;
+    }
+    .toolbar input,
+    .toolbar select {
+      padding: 10px 12px;
+      background: #0b0d13;
+      border: 1px solid #232734;
+      border-radius: 10px;
+      color: var(--text);
+    }
+    .toolbar input::placeholder { color: #64748b; }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 18px;
+      padding: 16px;
+    }
+    @media (min-width: 640px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 992px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Card */
+    .post {
+      background: var(--card);
+      border: 1px solid #232734;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: 0.15s ease;
+    }
+    .post:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
+    }
+    .thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+    .info { padding: 14px; }
+    .title {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .excerpt { font-size: 14px; color: #cbd5e1; }
+    .tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .tag {
+      background: #0b0d13;
+      border: 1px solid #2a2f3d;
+      color: #a5b4fc;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .btn {
+      margin-top: auto;
+      background: var(--accent);
+      color: #0b0d13;
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .status {
+      padding: 16px;
+      color: var(--muted);
+    }
+    footer {
+      margin-top: 20px;
+      padding: 28px 16px;
+      text-align: center;
+      border-top: 1px solid #222;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Blog Cards (Vanilla JavaScript)</h1>
+      <p class="sub">Rendering cards from dummy JSON data with search & sort.</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toolbar">
+      <input type="search" id="filterInput" placeholder="Search by title, author or tag…" />
+      <select id="sortOrder">
+        <option value="newest">Sort: Newest</option>
+        <option value="oldest">Sort: Oldest</option>
+        <option value="alpha">Sort: Title (A–Z)</option>
+      </select>
+    </div>
+
+    <div id="loadingText" class="status">Loading posts…</div>
+    <div id="postsGrid" class="grid" hidden></div>
+  </div>
+
+  <footer>
+    <div class="container">Built with HTML, CSS & JavaScript – rewritten but identical.</div>
+  </footer>
+
+  <script>
+    // ---------- Dummy Data ----------
+    const postsData = [
+      { id: 1, title: "Getting Started with JavaScript", author: "Ayesha Noor", date: "2025-08-12", tags: ["javascript","basics"], excerpt: "Learn variables, data types, and how to write your first script.", image: "https://picsum.photos/id/1015/800/500" },
+      { id: 2, title: "CSS Grid in 10 Minutes", author: "Bilal Khan", date: "2025-07-21", tags: ["css","layout"], excerpt: "A super quick primer to building responsive grids.", image: "https://picsum.photos/id/1025/800/500" },
+      { id: 3, title: "Understanding Fetch API", author: "Mehak Fatima", date: "2025-06-05", tags: ["javascript","api"], excerpt: "How to make HTTP requests in the browser the modern way.", image: "https://picsum.photos/id/1005/800/500" },
+      { id: 4, title: "Responsive Images Best Practices", author: "Hassan Ali", date: "2025-05-17", tags: ["images","performance"], excerpt: "Serve crisp images without slowing your site down.", image: "https://picsum.photos/id/1003/800/500" },
+      { id: 5, title: "Array Methods You’ll Use Daily", author: "Kiran Shah", date: "2025-04-09", tags: ["javascript","arrays"], excerpt: "Map, filter, reduce… with small, clear examples.", image: "https://picsum.photos/id/1011/800/500" },
+      { id: 6, title: "Writing Accessible HTML", author: "Usman Tariq", date: "2025-03-29", tags: ["html","a11y"], excerpt: "Simple tweaks to make your pages usable for everyone.", image: "https://picsum.photos/id/1035/800/500" }
+    ];
+
+    const grid = document.getElementById("postsGrid");
+    const loading = document.getElementById("loadingText");
+    const filterInput = document.getElementById("filterInput");
+    const sortOrder = document.getElementById("sortOrder");
+
+    const formatDate = (dateStr) => {
+      return new Date(dateStr).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    };
+
+    const buildCard = (post) => {
+      const card = document.createElement("article");
+      card.className = "post";
+      card.innerHTML = `
+        <img class="thumb" src="${post.image}" alt="${post.title}" />
+        <div class="info">
+          <h3 class="title">${post.title}</h3>
+          <div class="meta">
+            <span>By ${post.author}</span>
+            <span>•</span>
+            <span>${formatDate(post.date)}</span>
+          </div>
+          <p class="excerpt">${post.excerpt}</p>
+          <div class="tags">${post.tags.map(t => `<span class="tag">#${t}</span>`).join("")}</div>
+          <a href="#" class="btn">Read more</a>
+        </div>
+      `;
+      return card;
+    };
+
+    const renderCards = (posts) => {
+      grid.innerHTML = "";
+      posts.forEach(p => grid.appendChild(buildCard(p)));
+    };
+
+    const filterAndSort = (posts) => {
+      const query = filterInput.value.toLowerCase().trim();
+      let result = posts.filter(p =>
+        p.title.toLowerCase().includes(query) ||
+        p.author.toLowerCase().includes(query) ||
+        p.tags.some(t => t.toLowerCase().includes(query))
+      );
+
+      if (sortOrder.value === "newest") result.sort((a, b) => new Date(b.date) - new Date(a.date));
+      if (sortOrder.value === "oldest") result.sort((a, b) => new Date(a.date) - new Date(b.date));
+      if (sortOrder.value === "alpha") result.sort((a, b) => a.title.localeCompare(b.title));
+
+      return result;
+    };
+
+    const initApp = async () => {
+      try {
+        await new Promise(res => setTimeout(res, 400)); // simulate delay
+        loading.hidden = true;
+        grid.hidden = false;
+        renderCards(filterAndSort(postsData));
+
+        filterInput.addEventListener("input", () => renderCards(filterAndSort(postsData)));
+        sortOrder.addEventListener("change", () => renderCards(filterAndSort(postsData)));
+      } catch (e) {
+        loading.textContent = "Failed to load posts.";
+        console.error(e);
+      }
+    };
+
+    initApp();
+  </script>
+</body>
+</html>
