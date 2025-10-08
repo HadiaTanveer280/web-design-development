@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Validation</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f4f4f9;
+      font-family: Arial, Helvetica, sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-box {
+      width: 320px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .error-msg {
+      font-size: 13px;
+      color: red;
+      margin-top: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <form class="form-box" id="signupForm">
+    <h2>Create Account</h2>
+
+    <div class="field">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname">
+      <div class="error-msg" id="nameErr"></div>
+    </div>
+
+    <div class="field">
+      <label for="userEmail">Email</label>
+      <input type="text" id="userEmail">
+      <div class="error-msg" id="emailErr"></div>
+    </div>
+
+    <div class="field">
+      <label for="userPass">Password</label>
+      <input type="password" id="userPass">
+      <div class="error-msg" id="passErr"></div>
+    </div>
+
+    <div class="field">
+      <label for="userConfirm">Confirm Password</label>
+      <input type="password" id="userConfirm">
+      <div class="error-msg" id="confirmErr"></div>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    const signupForm = document.getElementById("signupForm");
+    const fullName = document.getElementById("fullname");
+    const emailField = document.getElementById("userEmail");
+    const passField = document.getElementById("userPass");
+    const confirmField = document.getElementById("userConfirm");
+
+    signupForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let isValid = true;
+
+      // Clear old errors
+      document.querySelectorAll(".error-msg").forEach(el => el.textContent = "");
+
+      // Validate name
+      if (fullName.value.trim() === "") {
+        document.getElementById("nameErr").textContent = "Full name is required";
+        isValid = false;
+      }
+
+      // Validate email with regex
+      const emailRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!emailRegex.test(emailField.value.trim())) {
+        document.getElementById("emailErr").textContent = "Please enter a valid email";
+        isValid = false;
+      }
+
+      // Validate password length
+      if (passField.value.length < 6) {
+        document.getElementById("passErr").textContent = "Password must be at least 6 characters";
+        isValid = false;
+      }
+
+      // Check password match
+      if (passField.value !== confirmField.value) {
+        document.getElementById("confirmErr").textContent = "Passwords do not match";
+        isValid = false;
+      }
+
+      // Success
+      if (isValid) {
+        alert("Form submitted successfully ✅");
+        signupForm.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
