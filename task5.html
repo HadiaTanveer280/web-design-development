@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClientRamp FAQs (Rewritten)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* ----- Reset & Base ----- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+  --clr-main: #2563eb;
+  --clr-main-dark: #1d4ed8;
+  --clr-text: #1e293b;
+  --clr-muted: #64748b;
+  --clr-bg: #f1f5f9;
+  --clr-border: #e2e8f0;
+  --shadow-soft: 0 4px 6px rgba(0,0,0,0.05);
+  --radius: 8px;
+}
+
+body {
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.6;
+}
+
+/* ----- Layout Containers ----- */
+.wrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ----- Header ----- */
+header {
+  background: #fff;
+  padding: 1rem 0;
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--clr-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand i { font-size: 1.8rem; }
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--clr-text);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--clr-main); }
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+}
+
+/* ----- Breadcrumb ----- */
+.path {
+  font-size: 0.9rem;
+  color: var(--clr-muted);
+  padding: 1rem 0;
+}
+
+.path a {
+  color: var(--clr-main);
+  text-decoration: none;
+}
+
+/* ----- Hero ----- */
+.hero-area {
+  background: #fff;
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-bottom: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.hero-area h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-area p {
+  font-size: 1.2rem;
+  color: var(--clr-muted);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ----- Search ----- */
+.search-box {
+  max-width: 600px;
+  margin: 2rem auto 0;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--clr-border);
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--clr-main);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.search-btn {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  background: var(--clr-main);
+  border: none;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-btn:hover { background: var(--clr-main-dark); }
+
+/* ----- Categories ----- */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  margin: 2rem 0;
+}
+
+.tab {
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  background: #fff;
+  border: 1px solid var(--clr-border);
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.tab:hover,
+.tab.active {
+  background: var(--clr-main);
+  color: #fff;
+  border-color: var(--clr-main);
+}
+
+/* ----- FAQ Section ----- */
+.faq-section {
+  margin-bottom: 2rem;
+}
+
+.faq-heading {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--clr-border);
+}
+
+.faq-block {
+  background: #fff;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.faq-header {
+  padding: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s;
+}
+
+.faq-header:hover { background: #f8fafc; }
+.faq-header i { transition: transform 0.3s; }
+.faq-block.active .faq-header i { transform: rotate(180deg); }
+
+.faq-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 0 1.5rem;
+}
+
+.faq-block.active .faq-body {
+  max-height: 500px;
+  padding: 0 1.5rem 1.5rem;
+}
+
+/* ----- Help Section ----- */
+.help-box {
+  background: #fff;
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.help-box h2 { margin-bottom: 1rem; }
+.help-box p { margin-bottom: 1.5rem; color: var(--clr-muted); }
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background: var(--clr-main);
+  color: #fff;
+  border-radius: 50px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn:hover { background: var(--clr-main-dark); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--clr-main);
+  color: var(--clr-main);
+  margin-left: 1rem;
+}
+.btn-outline:hover { background: var(--clr-main); color: #fff; }
+
+/* ----- Footer ----- */
+footer {
+  background: var(--clr-text);
+  color: #fff;
+  padding: 3rem 0 1.5rem;
+  margin-top: 3rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-col h3 { margin-bottom: 1.5rem; font-size: 1.2rem; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 0.8rem; }
+.footer-col a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.footer-col a:hover { color: #fff; }
+
+.socials {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.socials a {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.socials a:hover { background: var(--clr-main); }
+
+.copy {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 768px) {
+  .navbar { flex-direction: column; gap: 1rem; }
+  .nav-links { flex-direction: column; display: none; text-align: center; }
+  .nav-links.show { display: flex; }
+  .menu-toggle { display: block; position: absolute; top: 1rem; right: 1rem; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrapper navbar">
+    <a href="#" class="brand"><i class="fas fa-ramp-loading"></i> ClientRamp</a>
+    <button class="menu-toggle" id="menuBtn"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links" id="navMenu">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#" class="active">FAQs</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#" class="btn">Get Started</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrapper">
+  <div class="path"><a href="#">Home</a> > <a href="#">FAQs</a> > Getting Started</div>
+
+  <section class="hero-area">
+    <h1>Getting Started with Client Ramp</h1>
+    <p>Find answers to common questions about setting up and using Client Ramp for your business.</p>
+
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="Search FAQs...">
+      <button class="search-btn">Search</button>
+    </div>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active">All Questions</button>
+    <button class="tab">Account Setup</button>
+    <button class="tab">Billing & Pricing</button>
+    <button class="tab">Integrations</button>
+    <button class="tab">Troubleshooting</button>
+    <button class="tab">Security</button>
+  </div>
+
+  <section class="faq-section">
+    <h2 class="faq-heading">Getting Started</h2>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>How do I create a Client Ramp account?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>To create a Client Ramp account, visit our signup page and enter your email address. You'll receive a confirmation email and complete setup in under 5 minutes.</p></div>
+    </div>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>What information do I need to get started?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>You'll need basic company details like name, industry, and number of clients. More details can be added later as you customize workflows.</p></div>
+    </div>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>Is there a free trial available?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>Yes, a 14-day free trial with all features is available — no credit card required. After that, you can upgrade or pause your account.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2 class="faq-heading">Account Setup</h2>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>How do I customize my onboarding workflow?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>Go to the Workflows section in your dashboard to build onboarding steps, set automation, and personalize templates using drag-and-drop.</p></div>
+    </div>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>Can I import existing client data?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>Yes, you can import via CSV or integrate with CRMs like Salesforce and HubSpot for automatic sync.</p></div>
+    </div>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>How do I add team members?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>Admins can invite team members from Settings > Team Management and assign them specific roles.</p></div>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2 class="faq-heading">Billing & Pricing</h2>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>What payment methods do you accept?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>We accept major cards, PayPal, and bank transfers for annual plans — all payments are PCI-compliant.</p></div>
+    </div>
+
+    <div class="faq-block">
+      <div class="faq-header"><span>Can I change my plan later?</span><i class="fas fa-chevron-down"></i></div>
+      <div class="faq-body"><p>You can upgrade anytime (features unlock instantly) or downgrade (applies next billing cycle).</p></div>
+    </div>
+  </section>
+
+  <section class="help-box">
+    <h2>Still have questions?</h2>
+    <p>Our support team is here to help you make the most of Client Ramp.</p>
+    <a href="#" class="btn">Contact Support</a>
+    <a href="#" class="btn btn-outline">Schedule a Demo</a>
+  </section>
+</main>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>ClientRamp</h3>
+        <p>Streamlining client onboarding for businesses with automation and simple design.</p>
+        <div class="socials">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Integrations</a></li>
+          <li><a href="#">Updates</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Docs</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Legal</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">&copy; 2023 ClientRamp. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('menuBtn').addEventListener('click', ()=> {
+  document.getElementById('navMenu').classList.toggle('show');
+});
+
+document.querySelectorAll('.faq-header').forEach(q => {
+  q.addEventListener('click', ()=> q.parentElement.classList.toggle('active'));
+});
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', ()=> {
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    if(btn.textContent !== 'All Questions'){
+      alert('Filtering by: ' + btn.textContent);
+    }
+  });
+});
+
+document.querySelector('.search-btn').addEventListener('click', ()=> {
+  const term = document.querySelector('.search-input').value;
+  if(term) alert('Searching for: ' + term);
+});
+
+document.querySelector('.search-input').addEventListener('keypress', e=>{
+  if(e.key === 'Enter') document.querySelector('.search-btn').click();
+});
+</script>
+
+</body>
+</html>
