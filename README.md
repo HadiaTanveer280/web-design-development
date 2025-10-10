@@ -7,4 +7,5 @@ https://raw.githack.com/HadiaTanveer280/web-design-development/main/6%20task.zip
 https://raw.githack.com/HadiaTanveer280/web-design-development/main/task7.html
 https://raw.githack.com/HadiaTanveer280/web-design-development/main/task8.html
 https://raw.githack.com/HadiaTanveer280/web-design-development/main/task9.html
+https://raw.githack.com/HadiaTanveer280/web-design-development/main/task%2010.zip
 https://raw.githack.com/HadiaTanveer280/web-design-development/main/oel,31.zip
